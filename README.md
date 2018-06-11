@@ -7,14 +7,14 @@ sudo apt-get install graphviz
 pip install -r requirements.txt
 ```
 ## Running KUS
-You can run KUS by using 'KUS.py' Python script. The usage instructions can be found by running
+You can run KUS by using 'KUS.py' Python script. The usage instructions and default values to arguments can be found by running
 ```bash
 python KUS.py -h
 ```
-By default, KUS runs with the following set of arguments:
+<!-- By default, KUS runs with the following set of arguments:
 ```bash
 python KUS.py --outputfile samples.txt --drawtree 0 --samples 10 --useList 0 --randAssign 1 --dDNNF <name of input dDNNF file>
-```
+``` -->
 
 ## Output Format
 The output samples are stored in samples.txt by default. Each line of the output consists of a serial number of the sample followed by a satisfying assignment. The satisfying assignment consists of literals seperated by space. Note that turning random assignment (--randAssign) to 0 can lead to partial assignments in each line. In such cases, the unassigned variables can be chosen to be True or False.

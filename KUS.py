@@ -159,7 +159,7 @@ def random_assignment(totalVars, solution, useList):
     return solutionstr
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--outputfile", type=str, default="samples.txt", help="output file for samples", dest='outputfile')
     parser.add_argument("--drawtree", type=int, default = 0, help="draw nnf tree", dest='draw')
     parser.add_argument("--samples", type=int, default = 10, help="number of samples", dest='samples')
