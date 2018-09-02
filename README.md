@@ -1,11 +1,13 @@
 # KUS-Sampler
-KUS generates Uniform Samples by using a compiled d-DNNF form of a cnf. It expects the d-DNNF to obey the same format as that produced by the [C2D compiler](http://reasoning.cs.ucla.edu/c2d/) and CNF to obey the DIMACS format.
+KUS generates Uniform Samples by using a compiled d-DNNF form of a CNF. It expects the d-DNNF to obey the same format as that produced by the [C2D compiler](http://reasoning.cs.ucla.edu/c2d/) and CNF to obey the DIMACS format.
 
 ## Installation
 ```bash
 sudo apt-get install graphviz
 pip install -r requirements.txt
 ```
+For now, [D4 compiler](http://www.cril.univ-artois.fr/KC/d4.html) is included as default for compiling CNF to d-DNNF. Any other compiler can be easily used with slight modifications.
+
 ## Running KUS
 You can run KUS by using 'KUS.py' Python script. The usage instructions and default values to arguments can be found by running
 ```bash
