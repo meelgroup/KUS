@@ -2,6 +2,7 @@ import argparse
 import pickle
 import random
 import time
+import os
 
 import numpy as np
 import pydot
@@ -142,7 +143,7 @@ def random_assignment(totalVars, solution, useList):
     if useList:
         solutionstr = ''
         for literal in solution:
-            if literal:
+            if literal: #literal is not 0 ie unassigned
                 literals.add(abs(int(literal)))
         for i in range(1,totalVars+1):
             if i not in literals:
@@ -166,9 +167,11 @@ def main():
     parser.add_argument("--useList", type=int, default = 0, help="use list for storing samples internally instead of strings", dest="useList")
     parser.add_argument("--randAssign", type=int, default = 1, help="randomly assign unassigned variables in a model with partial assignments", dest="randAssign")
     parser.add_argument("--savePickle", type=str, default=None, help="specify name to save Pickle of count annotated dDNNF for incremental sampling", dest="savePickle")
+    parser.add_argument("--printStats", type=int, default=0, help="print d-DNNF compilation stats", dest="printStats")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--dDNNF', type=str, help="specify dDNNF file", dest="dDNNF")
     group.add_argument('--countPickle', type=str, help="specify Pickle of count annotated dDNNF", dest="countPickle")
+    group.add_argument("--inputcnf", type=str, help="input cnf file", dest="DIMACSCNF")
     args = parser.parse_args()
     draw = args.draw
     totalsamples = args.samples
@@ -176,10 +179,16 @@ def main():
     randAssignInt = args.randAssign
     dDNNF = False
     countPickle = False
-    if args.dDNNF:
+    DIMACSCNF = ""
+    printCompilerOutput = False
+    if args.DIMACSCNF:
+        DIMACSCNF = args.DIMACSCNF
+    elif args.dDNNF:
         dDNNF = args.dDNNF
-    else:
+    elif args.countPickle:
         countPickle = args.countPickle
+    if args.printStats:
+        printCompilerOutput = args.printStats
     savePickle = args.savePickle
     useList = False
     if (useListInt == 1):
@@ -189,14 +198,29 @@ def main():
         randAssign = True
     sampler = Sampler()
     sampler.useList = useList
+    if DIMACSCNF:
+        DIMACSCNF = args.DIMACSCNF
+        with open(DIMACSCNF, "r") as f:
+            text = f.read()
+            f.close()
+        dDNNF = DIMACSCNF + ".nnf"
+        cmd = "./d4 " + DIMACSCNF + " -out=" + dDNNF
+        if not printCompilerOutput:
+            cmd += " > /dev/null 2>&1"
+        else:
+            print("The stats of dDNNF compiler: ")
+        start = time.time()
+        os.system(cmd)
+        if not printCompilerOutput:
+            print("Time taken for dDNNF compilation: ", time.time() - start)
     if dDNNF:
         start = time.time()
         sampler.parse(dDNNF)
-        print("The time taken to parse the nnf text:", time.time() - start)
+        print("Time taken to parse the nnf text:", time.time() - start)
         start = time.time()
         bitvec = sampler.counting(sampler.treenodes[-1])
         sampler.treenodes[-1].models = sampler.treenodes[-1].models * (2**(sampler.totalvariables - len(bitvec)))
-        print("The time taken for Model Counting:", time.time()-start)
+        print("Time taken for Model Counting:", time.time()-start)
         timepickle = time.time()
         if savePickle:
             fp = open(savePickle, "wb")
@@ -208,7 +232,7 @@ def main():
         fp = open(countPickle, "rb")
         (sampler.totalvariables,sampler.treenodes) = pickle.load(fp)
         fp.close()
-        print("The time taken to read the pickle:", time.time() - timepickle)
+        print("Time taken to read the pickle:", time.time() - timepickle)
         if savePickle:
             fp = open(savePickle, "wb")
             pickle.dump((sampler.totalvariables,sampler.treenodes), fp)
@@ -221,20 +245,29 @@ def main():
         sampler.drawtree(sampler.treenodes[-1])
         sampler.graph.write_png('d-DNNFgraph.png')
     if (useList):
-        sampler.samples = np.zeros((totalsamples,sampler.totalvariables))
+        sampler.samples = np.zeros((totalsamples,sampler.totalvariables), dtype=np.int32)
     else:
         sampler.samples = []
         for i in range(totalsamples):
             sampler.samples.append('')
     start = time.time()
     sampler.getsamples(sampler.treenodes[-1],np.arange(0,totalsamples))
-    print("The time taken by sampling:", time.time()-start)
+    print("Time taken by sampling:", time.time()-start)
+    f = open(args.outputfile,"w+")
     if randAssign:
         sampler.samples = list(map(lambda x: random_assignment(sampler.totalvariables, x, sampler.useList), sampler.samples))
-    f = open(args.outputfile,"w+")
-    for i in range(totalsamples):
-        f.write(str(i+1) + ", " + sampler.samples[i] + "\n")
-    f.close()
+        for i in range(totalsamples):
+            f.write(str(i+1) + ", " + sampler.samples[i] + "\n")
+        f.close()
+    else:
+        if useList:
+            for i in range(totalsamples):
+                f.write(str(i+1) + ", " + " ".join(map(str,sampler.samples[i])) + "\n")
+            f.close()
+        else:        
+            for i in range(totalsamples):
+                f.write(str(i+1) + ", " + sampler.samples[i] + "\n")
+            f.close()
     print("Samples saved to", args.outputfile)
 
 if __name__== "__main__":
