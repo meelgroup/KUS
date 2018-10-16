@@ -23,7 +23,8 @@ The output samples are stored in samples.txt by default. Each line of the output
 
 Also, KUS can output a graphical representation of tree for the input NNF. In this tree, the leaves consists of literals and internal nodes can be OR ('O') or AND ('A') nodes as expected for an NNF. However, internal nodes also contain 2 numbers seperated by space in our representation. This second one gives the annotation. The first one, only serves the purpose of distinguishing between individual OR and AND nodes and has no other meaning.
 
-
+## Benchmarks
+Benchmarks can be found [here](https://drive.google.com/file/d/1zWg9MiDx2_uF8xGWbAm9RQ1duOgWe--5/view?usp=sharing).
 ## Contributors
   * Rahul Gupta (grahul@cse.iitk.ac.in)
   * Shubham Sharma (smsharma@cse.iitk.ac.in)
