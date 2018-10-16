@@ -11,7 +11,7 @@ For now, [D4 compiler](http://www.cril.univ-artois.fr/KC/d4.html) is included as
 ## Running KUS
 You can run KUS by using 'KUS.py' Python script. A simple invocation looks as follows:
 ```bash
-python KUS.py --inputcnf <filename>
+python KUS.py <cnffile>
 ```
 The usage instructions and default values to arguments can be found by running
 ```bash
@@ -29,3 +29,17 @@ Also, KUS can output a graphical representation of tree for the input NNF. In th
   * Shubham Sharma (smsharma@cse.iitk.ac.in)
   * Subhajit Roy (subhajit@iitk.ac.in)
   * Kuldeep Meel (meel@comp.nus.edu.sg)
+
+
+<!-- If you use our tool, please cite us using the following bibtex:
+```
+@inproceedings{SGRM18,
+	author={Sharma, Shubham and  Gupta, Rahul and  Roy, Subhajit and Meel, Kuldeep S.},
+	title={Knowledge Compilation meets Uniform Sampling},
+	year={2018},
+	booktitle={Proceedings at International Conference on Logic for Programming, Artificial Intelligence and Reasoning},
+	month={09},
+	abstract={Uniform sampling has drawn diverse applications in programming languages and software engineering, like in constrained-random verification (CRV), constrained-fuzzing and bug synthesis. The effectiveness of these applications depend on the uniformity of test stimuli generated from a given set of constraints. Despite significant progress over the past few years, the performance of the state of the art techniques still falls short of those of heuristic methods employed in the industry which sacrifice either uniformity or scalability when generating stimuli. In this paper, we propose a new approach to the uniform generation that builds on recent progress in knowledge compilation. The primary contribution of this paper is marrying knowledge compilation with uniform sampling: our algorithm, KUS, employs the state-of-the-art knowledge compilers to first compile constraints into d-DNNF form, and then, generates samples by making two passes over the compiled representation. },
+}
+
+``` -->

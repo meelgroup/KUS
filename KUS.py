@@ -1,23 +1,23 @@
-/***********[KUS.py]
-Copyright (c) 2018 Rahul Gupta, Shubham Sharma, Subhajit Roy, Kuldeep Meel
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# /***********[KUS.py]
+# Copyright (c) 2018 Rahul Gupta, Shubham Sharma, Subhajit Roy, Kuldeep Meel
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-***********/
+# ***********/
 
 import argparse
 import pickle
@@ -181,7 +181,7 @@ def random_assignment(totalVars, solution, useList):
     return solutionstr
 
 def main():
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)  
     parser.add_argument("--outputfile", type=str, default="samples.txt", help="output file for samples", dest='outputfile')
     parser.add_argument("--drawtree", type=int, default = 0, help="draw nnf tree", dest='draw')
     parser.add_argument("--samples", type=int, default = 10, help="number of samples", dest='samples')
@@ -192,7 +192,8 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--dDNNF', type=str, help="specify dDNNF file", dest="dDNNF")
     group.add_argument('--countPickle', type=str, help="specify Pickle of count annotated dDNNF", dest="countPickle")
-    group.add_argument("--inputcnf", type=str, help="input cnf file", dest="DIMACSCNF")
+    group.add_argument('DIMACSCNF', nargs='?', type=str, default="", help='input cnf file')
+    
     args = parser.parse_args()
     draw = args.draw
     totalsamples = args.samples
@@ -247,6 +248,7 @@ def main():
             fp = open(savePickle, "wb")
             pickle.dump((sampler.totalvariables,sampler.treenodes), fp)
             fp.close()
+            print("Count annotated dDNNF pickle saved to:", savePickle)
             print("Time taken to save the count annotated dDNNF pickle:", time.time() - timepickle)
     else:
         timepickle = time.time()
