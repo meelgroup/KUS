@@ -189,12 +189,14 @@ def main():
     parser.add_argument("--randAssign", type=int, default = 1, help="randomly assign unassigned variables in a model with partial assignments", dest="randAssign")
     parser.add_argument("--savePickle", type=str, default=None, help="specify name to save Pickle of count annotated dDNNF for incremental sampling", dest="savePickle")
     parser.add_argument("--printStats", type=int, default=0, help="print d-DNNF compilation stats", dest="printStats")
+    parser.add_argument("--seed", type=int, default=0, help="seed for random number generator", dest="seed")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--dDNNF', type=str, help="specify dDNNF file", dest="dDNNF")
     group.add_argument('--countPickle', type=str, help="specify Pickle of count annotated dDNNF", dest="countPickle")
     group.add_argument('DIMACSCNF', nargs='?', type=str, default="", help='input cnf file')
     
     args = parser.parse_args()
+    random.seed(args.seed)
     draw = args.draw
     totalsamples = args.samples
     useListInt = args.useList
@@ -239,6 +241,9 @@ def main():
         start = time.time()
         sampler.parse(dDNNF)
         print("Time taken to parse the nnf text:", time.time() - start)
+        if (not sampler.totalvariables):
+            print("Formula is UNSAT! The generated d-DNNF is empty.")
+            exit()
         start = time.time()
         bitvec = sampler.counting(sampler.treenodes[-1])
         sampler.treenodes[-1].models = sampler.treenodes[-1].models * (2**(sampler.totalvariables - len(bitvec)))
