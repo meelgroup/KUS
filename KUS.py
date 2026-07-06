@@ -25,6 +25,7 @@ import random
 import time
 import os
 from os import path
+import subprocess
 
 import numpy as np
 import pydot
@@ -64,6 +65,7 @@ class Sampler:
 
     def parse(self, inputnnffile):
         """Parses the d-DNNF tree to a tree like object"""
+
         with open(inputnnffile) as f:
             treetext = f.readlines()
         nodelen = 0
@@ -298,7 +300,8 @@ def main():
         else:
             print("The stats of dDNNF compiler: ")
         start = time.time()
-        os.system(cmd)
+        subprocess.run([cmd], cwd=path.dirname(__file__), shell=True)
+
         if not printCompilerOutput:
             print("Time taken for dDNNF compilation: ", time.time() - start)
     if dDNNF:
