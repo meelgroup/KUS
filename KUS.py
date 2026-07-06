@@ -24,6 +24,7 @@ import pickle
 import random
 import time
 import os
+from os import path
 
 import numpy as np
 import pydot
@@ -289,10 +290,7 @@ def main():
     sampler = Sampler()
     sampler.useList = useList
     if DIMACSCNF:
-        DIMACSCNF = args.DIMACSCNF
-        with open(DIMACSCNF, "r") as f:
-            text = f.read()
-            f.close()
+        DIMACSCNF = path.abspath(args.DIMACSCNF)
         dDNNF = DIMACSCNF + ".nnf"
         cmd = "./d4 " + DIMACSCNF + " -out=" + dDNNF
         if not printCompilerOutput:
