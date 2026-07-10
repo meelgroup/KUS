@@ -1,2 +1,2 @@
-numpy == 1.14.4
-pydot == 1.2.4
+numpy
+pydot
